@@ -1,0 +1,27 @@
+#
+# This file declares the default version catalog (for more info on Gradle's version catalogs, see
+# https://docs.gradle.org/8.7/userguide/platforms.html).
+#
+# NOTE: The declarations in each of the 4 major sections are ordered alphabetically.  Please maintain this sorting order
+# when inserting new declarations.
+#
+
+[versions]
+javaLanguageCompatibility = "17"
+junit = "5.10.2"
+kotest = "5.9.1"
+kotlin = "2.0.0"
+
+[plugins]
+
+[libraries]
+junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+kotest-api = { module = "io.kotest:kotest-framework-api-jvm", version.ref = "kotest" }
+kotest-assertions = { module = "io.kotest:kotest-assertions-core-jvm", version.ref = "kotest" }
+kotest-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
+kotest-extensions = { module = "io.kotest:kotest-extensions-jvm", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+kotest-runner = { module = "io.kotest:kotest-runner-junit5-jvm", version.ref = "kotest" }
+
+[bundles]
+kotest = [ "kotest-api", "kotest-assertions", "kotest-datatest", "kotest-extensions", "kotest-property" ]
