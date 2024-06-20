@@ -42,6 +42,7 @@ package io.ysakhno.adventofcode2015.day09
 import io.ysakhno.adventofcode2015.util.ProblemInput
 import io.ysakhno.adventofcode2015.util.allInts
 import io.ysakhno.adventofcode2015.util.allWords
+import io.ysakhno.adventofcode2015.util.permutations
 import io.ysakhno.adventofcode2015.util.println
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -54,20 +55,10 @@ private fun getDistance(line: String): List<Pair<Pair<String, String>, Int>> {
     return listOf((loc1 to loc2) to distance, (loc2 to loc1) to distance)
 }
 
-private fun permutations(locations: List<String>) = sequence {
-    val queue = ArrayDeque<Set<String>>().apply { this += locations.map(::setOf) }
-    while (queue.isNotEmpty()) {
-        val taken = queue.removeFirst()
-
-        if (taken.size == locations.size) yield(taken.toList())
-        else locations.filter { it !in taken }.forEach { queue.addLast(taken + it) }
-    }
-}
-
 private fun solve(input: List<String>, isLookingForMinimal: Boolean): Int {
     val distances = input.flatMap(::getDistance).toMap()
     val locations = distances.keys.map { (loc) -> loc }.distinct()
-    val pathLengths = permutations(locations)
+    val pathLengths = locations.permutations()
         .map(List<String>::zipWithNext)
         .filter { path -> path.all { it in distances.keys } }
         .map { path -> path.sumOf { distances[it] ?: 0 } }

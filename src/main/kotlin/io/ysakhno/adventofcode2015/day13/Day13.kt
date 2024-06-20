@@ -55,6 +55,7 @@
 package io.ysakhno.adventofcode2015.day13
 
 import io.ysakhno.adventofcode2015.util.ProblemInput
+import io.ysakhno.adventofcode2015.util.permutations
 import io.ysakhno.adventofcode2015.util.println
 import io.ysakhno.adventofcode2015.util.swap
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -82,16 +83,6 @@ private fun parseDisposition(line: String): Pair<Pair<String, String>, Int> {
     return (name1 to name2) to change
 }
 
-private fun permutations(people: List<String>) = sequence {
-    val queue = ArrayDeque<Set<String>>().apply { this += people.map(::setOf) }
-    while (queue.isNotEmpty()) {
-        val taken = queue.removeFirst()
-
-        if (taken.size == people.size) yield(taken.toList())
-        else people.filter { it !in taken }.forEach { queue.addLast(taken + it) }
-    }
-}
-
 private fun computeHappiness(arrangement: List<String>, dispositions: Map<Pair<String, String>, Int>) =
     if (arrangement.isNotEmpty()) (arrangement + arrangement.first()).zipWithNext().sumOf { pair ->
         dispositions.getOrDefault(pair, 0) + dispositions.getOrDefault(pair.swap(), 0)
@@ -101,7 +92,7 @@ private fun solve(input: List<String>, isMeToo: Boolean): Int {
     val dispositions = input.associate(::parseDisposition)
     val people = dispositions.keys.map { it.first }.distinct().let { if (isMeToo) it + "Me" else it }
 
-    return permutations(people).map { computeHappiness(it, dispositions) }.max()
+    return people.permutations().map { computeHappiness(it, dispositions) }.max()
 }
 
 private fun part1(input: List<String>) = solve(input, false)
